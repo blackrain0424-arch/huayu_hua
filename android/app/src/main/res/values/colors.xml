@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_green">#FF2E7D32</color>
+    <color name="brand_pink">#FFC2185B</color>
+    <color name="brand_light_pink">#FFFFEEF4</color>
+    <color name="brand_warm_bg">#FFFFFBF6</color>
+</resources>
