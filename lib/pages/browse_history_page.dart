@@ -4,6 +4,7 @@ import '../models/flower_spot.dart';
 import '../data/flower_data.dart';
 import '../services/storage_service.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/flower_image_widget.dart';
 import 'flower_detail_page.dart';
 
 class BrowseHistoryPage extends StatefulWidget {
@@ -129,11 +130,13 @@ class _BrowseHistoryPageState extends State<BrowseHistoryPage> {
               width: 46,
               height: 46,
               decoration: const BoxDecoration(
-                color: appLightPink,
                 shape: BoxShape.circle,
               ),
-              alignment: Alignment.center,
-              child: const Text('🌸', style: TextStyle(fontSize: 22)),
+              child: FlowerImageWidget(
+                flowerNames: record.flowers,
+                size: 46,
+                circle: true,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(

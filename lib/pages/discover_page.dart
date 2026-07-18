@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/flower_data.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/daily_flower_card.dart';
+import '../widgets/flower_image_widget.dart';
 import 'flower_detail_page.dart';
 
 class DiscoverPage extends StatelessWidget {
@@ -27,7 +28,7 @@ class DiscoverPage extends StatelessWidget {
           const SizedBox(height: 12),
           _buildRecommendCard(
             context,
-            emoji: '🌸',
+            flowerName: '牡丹',
             title: '春日牡丹',
             subtitle: '洛阳、菏泽 · 4月前后',
             description: '牡丹雍容华贵，是春季最具代表性的观赏花卉之一。',
@@ -36,7 +37,7 @@ class DiscoverPage extends StatelessWidget {
           ),
           _buildRecommendCard(
             context,
-            emoji: '🌼',
+            flowerName: '油菜花',
             title: '油菜花海',
             subtitle: '婺源 · 3月 - 4月',
             description: '层层梯田与金黄色花海交织，是春日旅行的经典目的地。',
@@ -45,7 +46,7 @@ class DiscoverPage extends StatelessWidget {
           ),
           _buildRecommendCard(
             context,
-            emoji: '💜',
+            flowerName: '薰衣草',
             title: '薰衣草花田',
             subtitle: '伊犁 · 6月 - 7月',
             description: '夏季的伊犁有大片紫色薰衣草花田，浪漫又治愈。',
@@ -155,7 +156,7 @@ class DiscoverPage extends StatelessWidget {
 
   Widget _buildRecommendCard(
     BuildContext context, {
-    required String emoji,
+    required String flowerName,
     required String title,
     required String subtitle,
     required String description,
@@ -184,7 +185,11 @@ class DiscoverPage extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 38)),
+            FlowerImageWidget(
+              flowerName: flowerName,
+              size: 52,
+              borderRadius: 12,
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -248,7 +253,11 @@ class DiscoverPage extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text(m['e']!, style: const TextStyle(fontSize: 28)),
+                FlowerImageWidget(
+                  flowerName: m['f']!,
+                  size: 36,
+                  borderRadius: 10,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   m['m']!,

@@ -3,6 +3,8 @@ import '../models/flower_spot.dart';
 import '../models/browse_record.dart';
 import '../services/storage_service.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/flower_image_widget.dart';
+import '../utils/flower_image_mapper.dart';
 
 class FlowerDetailPage extends StatefulWidget {
   final FlowerSpot spot;
@@ -149,10 +151,14 @@ class _FlowerDetailPageState extends State<FlowerDetailPage> {
       ),
       child: Stack(
         children: [
-          const Positioned(
+          Positioned(
             right: 24,
             top: 20,
-            child: Text('🌸', style: TextStyle(fontSize: 70)),
+            child: FlowerImageWidget(
+              flowerNames: spot.flowers,
+              size: 80,
+              borderRadius: 16,
+            ),
           ),
           Positioned(
             left: 22,
@@ -190,38 +196,49 @@ class _FlowerDetailPageState extends State<FlowerDetailPage> {
 
   Widget _buildImagePlaceholder() {
     final spot = widget.spot;
-    final List<Color> gradientColors;
-    if (spot.flowers.contains('樱花')) {
-      gradientColors = [const Color(0xFFFFC1D6), const Color(0xFFFFE0EC)];
-    } else if (spot.flowers.contains('荷花')) {
-      gradientColors = [const Color(0xFFC8E6C9), const Color(0xFFF1F8E9)];
-    } else if (spot.flowers.contains('薰衣草')) {
-      gradientColors = [const Color(0xFFE1BEE7), const Color(0xFFF3E5F5)];
-    } else if (spot.flowers.contains('油菜花')) {
-      gradientColors = [const Color(0xFFFFF9C4), const Color(0xFFFFFDE7)];
-    } else if (spot.flowers.contains('梅花')) {
-      gradientColors = [const Color(0xFFFFCDD2), const Color(0xFFFFF0F0)];
-    } else if (spot.flowers.contains('向日葵')) {
-      gradientColors = [const Color(0xFFFFE082), const Color(0xFFFFF8E1)];
-    } else if (spot.flowers.contains('桃花')) {
-      gradientColors = [const Color(0xFFF8BBD0), const Color(0xFFFCE4EC)];
-    } else if (spot.flowers.contains('牡丹')) {
-      gradientColors = [const Color(0xFFE1BEE7), const Color(0xFFFCE4EC)];
-    } else {
-      gradientColors = [const Color(0xFFC8E6C9), const Color(0xFFFFF1B8)];
-    }
+    final imagePath = FlowerImageMapper.getFirstImagePath(spot.flowers);
 
     return Container(
-      height: 180,
+      height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(colors: gradientColors, begin: Alignment.topLeft, end: Alignment.bottomRight),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: imagePath != null
+            ? Image.asset(
+                imagePath,
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return _buildImageFallback(spot);
+                },
+              )
+            : _buildImageFallback(spot),
+      ),
+    );
+  }
+
+  Widget _buildImageFallback(FlowerSpot spot) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFC8E6C9), Color(0xFFFFF1B8)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(_flowerEmoji, style: const TextStyle(fontSize: 56)),
+            FlowerImageWidget(
+              flowerNames: spot.flowers,
+              size: 72,
+              borderRadius: 16,
+            ),
             const SizedBox(height: 8),
             Text(
               spot.flowers.join(' · '),
@@ -231,22 +248,5 @@ class _FlowerDetailPageState extends State<FlowerDetailPage> {
         ),
       ),
     );
-  }
-
-  String get _flowerEmoji {
-    final f = widget.spot.flowers.first;
-    if (f.contains('樱花')) return '🌸';
-    if (f.contains('荷花')) return '🪷';
-    if (f.contains('薰衣草')) return '💜';
-    if (f.contains('油菜花')) return '🌼';
-    if (f.contains('梅花')) return '🌸';
-    if (f.contains('向日葵')) return '🌻';
-    if (f.contains('桃花')) return '🌸';
-    if (f.contains('牡丹')) return '🌺';
-    if (f.contains('山茶')) return '🌺';
-    if (f.contains('琼花')) return '🤍';
-    if (f.contains('桂花')) return '🌼';
-    if (f.contains('格桑花')) return '🌸';
-    return '🌸';
   }
 }

@@ -10,6 +10,7 @@ import '../models/flower_spot.dart';
 import '../data/flower_data.dart';
 import '../data/city_flower_data.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/flower_image_widget.dart';
 import 'flower_detail_page.dart';
 import 'upload_form_page.dart';
 
@@ -362,7 +363,12 @@ class _MapHomePageState extends State<MapHomePage> {
               // Title
               Row(
                 children: [
-                  const Text('🌸', style: TextStyle(fontSize: 28)),
+                  FlowerImageWidget(
+                    flowerNames: result.flower != null ? [result.flower!] : null,
+                    flowerName: result.flower,
+                    size: 34,
+                    borderRadius: 8,
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -485,7 +491,11 @@ class _MapHomePageState extends State<MapHomePage> {
               ),
               Row(
                 children: [
-                  const Text('🌸', style: TextStyle(fontSize: 30)),
+                  FlowerImageWidget(
+                    flowerNames: spot.flowers,
+                    size: 36,
+                    borderRadius: 8,
+                  ),
                   const SizedBox(width: 10),
                   Text(spot.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ],
@@ -616,7 +626,6 @@ class _MapHomePageState extends State<MapHomePage> {
                           Container(
                             width: 42, height: 42,
                             decoration: BoxDecoration(
-                              color: Colors.white,
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.pink, width: 2),
                               boxShadow: [
@@ -627,8 +636,11 @@ class _MapHomePageState extends State<MapHomePage> {
                                 ),
                               ],
                             ),
-                            alignment: Alignment.center,
-                            child: const Text('🌸', style: TextStyle(fontSize: 24)),
+                            child: FlowerImageWidget(
+                              flowerNames: spot.flowers,
+                              size: 42,
+                              circle: true,
+                            ),
                           ),
                           const SizedBox(height: 2),
                           Container(
@@ -697,10 +709,13 @@ class _MapHomePageState extends State<MapHomePage> {
                         leading: CircleAvatar(
                           radius: 18,
                           backgroundColor: appLightPink,
-                          child: Text(
-                            r.flower != null ? '🌸' : '📍',
-                            style: const TextStyle(fontSize: 16),
-                          ),
+                          child: r.flower != null
+                              ? FlowerImageWidget(
+                                  flowerName: r.flower!,
+                                  size: 28,
+                                  borderRadius: 14,
+                                )
+                              : const Icon(Icons.location_on, size: 18, color: appPink),
                         ),
                         title: Text(r.title, style: const TextStyle(fontWeight: FontWeight.w600)),
                         subtitle: Text(r.subtitle, style: const TextStyle(fontSize: 12)),
