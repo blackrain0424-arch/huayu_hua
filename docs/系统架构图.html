@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华语花APP — 系统架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f5f0eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    padding: 40px 20px;
+  }
+  .diagram {
+    max-width: 960px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    color: #2E7D32;
+    font-size: 28px;
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 36px;
+  }
+
+  /* layer box */
+  .layer {
+    border-radius: 18px;
+    padding: 22px 28px;
+    margin-bottom: 0;
+    position: relative;
+  }
+  .layer-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .layer-title .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* user layer */
+  .layer-user {
+    background: #fff;
+    border: 2px solid #ddd;
+    text-align: center;
+    padding: 16px 28px;
+  }
+  .platform-tags {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .platform-tag {
+    background: #f0f0f0;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  /* arrows between layers */
+  .arrow-down {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+  }
+  .arrow-down svg { width: 28px; height: 22px; }
+
+  /* flutter layer */
+  .layer-flutter {
+    background: linear-gradient(135deg, #E8F5E9 0%, #FFF8E1 50%, #FCE4EC 100%);
+    border: 2px solid #A5D6A7;
+  }
+  .layer-flutter .layer-title { color: #2E7D32; }
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .module-card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .module-card .icon { font-size: 24px; margin-bottom: 4px; }
+  .module-card .name { font-weight: bold; font-size: 14px; color: #333; }
+  .module-card .detail { font-size: 11px; color: #888; margin-top: 2px; line-height: 1.6; }
+
+  /* split to two columns */
+  .split-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+    height: 60px;
+  }
+  .split-arrow svg { width: 100%; height: 60px; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* supabase layer */
+  .layer-supabase {
+    background: #fff;
+    border: 2px solid #81C784;
+  }
+  .layer-supabase .layer-title { color: #1B5E20; }
+  .layer-supabase .dot { background: #4CAF50; }
+
+  /* amap layer */
+  .layer-amap {
+    background: #fff;
+    border: 2px solid #FFCC80;
+  }
+  .layer-amap .layer-title { color: #E65100; }
+  .layer-amap .dot { background: #FF9800; }
+
+  .service-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .service-tag {
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+  .service-tag.green {
+    background: #E8F5E9;
+    border: 1px solid #C8E6C9;
+    color: #2E7D32;
+  }
+  .service-tag.orange {
+    background: #FFF3E0;
+    border: 1px solid #FFE0B2;
+    color: #E65100;
+  }
+  .service-tag .svc-name { font-weight: bold; }
+  .service-tag .svc-desc { font-size: 11px; margin-top: 2px; opacity: 0.8; }
+
+  /* AI layer */
+  .arrow-from-supabase {
+    display: flex;
+    justify-content: center;
+    padding: 6px 0;
+  }
+  .layer-ai {
+    background: linear-gradient(135deg, #EDE7F6, #E1F5FE);
+    border: 2px solid #B39DDB;
+  }
+  .layer-ai .layer-title { color: #4527A0; }
+  .layer-ai .dot { background: #7C4DFF; }
+
+  .ai-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .ai-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .ai-card .ai-name { font-weight: bold; font-size: 14px; color: #333; }
+  .ai-card .ai-model { font-size: 12px; color: #7C4DFF; margin: 2px 0; }
+  .ai-card .ai-desc { font-size: 11px; color: #888; line-height: 1.5; }
+
+  @media (max-width: 700px) {
+    .modules { grid-template-columns: repeat(3, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .ai-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="diagram">
+
+  <h1>🌸 华语花 APP — 系统架构图</h1>
+  <p class="subtitle">Flutter 跨平台 · Supabase BaaS · 双引擎 AI</p>
+
+  <!-- ===== 用户层 ===== -->
+  <div class="layer layer-user">
+    <div class="layer-title">
+      <span class="dot" style="background:#bbb"></span> 用户层 (Clients)
+    </div>
+    <div class="platform-tags">
+      <span class="platform-tag">📱 Android APK</span>
+      <span class="platform-tag">🍎 iOS IPA</span>
+      <span class="platform-tag">🌐 Web (SPA)</span>
+      <span class="platform-tag">🖥️ Windows EXE</span>
+      <span class="platform-tag">💻 macOS APP</span>
+    </div>
+  </div>
+
+  <div class="arrow-down">
+    <svg viewBox="0 0 28 22"><defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#999"/></marker></defs><line x1="14" y1="0" x2="14" y2="16" stroke="#999" stroke-width="2" marker-end="url(#a)"/></svg>
+  </div>
+
+  <!-- ===== Flutter 前端层 ===== -->
+  <div class="layer layer-flutter">
+    <div class="layer-title">
+      <span class="dot" style="background:#4CAF50"></span> 前端层 — Flutter 3.41.9 + Dart 3.11.5（一套代码，五端编译）
+    </div>
+    <div class="modules">
+      <div class="module-card">
+        <div class="icon">🗺️</div>
+        <div class="name">地图模块</div>
+        <div class="detail">flutter_map<br>高德瓦片服务<br>GPS 定位<br>地点搜索</div>
+      </div>
+      <div class="module-card">
+        <div class="icon">🌸</div>
+        <div class="name">发现模块</div>
+        <div class="detail">每日花历<br>季节推荐<br>花卉百科<br>月份指南</div>
+      </div>
+      <div class="module-card">
+        <div class="icon">👥</div>
+        <div class="name">社区模块</div>
+        <div class="detail">图文发帖<br>点赞评论<br>图片上传<br>花标签定位</div>
+      </div>
+      <div class="module-card">
+        <div class="icon">🤖</div>
+        <div class="name">花语 Bot</div>
+        <div class="detail">AI 文字对话<br>拍照识花<br>离线匹配<br>TTS 语音朗读</div>
+      </div>
+      <div class="module-card">
+        <div class="icon">👤</div>
+        <div class="name">个人中心</div>
+        <div class="detail">邮箱登录<br>收藏记录<br>浏览历史<br>资料编辑</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-down">
+    <svg viewBox="0 0 28 22"><defs><marker id="b" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#999"/></marker></defs><line x1="14" y1="0" x2="14" y2="16" stroke="#999" stroke-width="2" marker-end="url(#b)"/></svg>
+  </div>
+
+  <!-- ===== 分叉: Supabase + 高德 ===== -->
+  <div class="two-col">
+    <div class="layer layer-supabase">
+      <div class="layer-title">
+        <span class="dot"></span> 后端服务层 — Supabase BaaS
+      </div>
+      <div class="service-row">
+        <div class="service-tag green">
+          <div class="svc-name">🔐 Auth 认证</div>
+          <div class="svc-desc">邮箱注册 / 登录<br>会话管理</div>
+        </div>
+        <div class="service-tag green">
+          <div class="svc-name">🗄️ Database</div>
+          <div class="svc-desc">PostgreSQL<br>posts · comments<br>likes · profiles</div>
+        </div>
+      </div>
+      <div class="service-row" style="margin-top:8px">
+        <div class="service-tag green">
+          <div class="svc-name">📦 Storage</div>
+          <div class="svc-desc">图片存储<br>post-images 桶</div>
+        </div>
+        <div class="service-tag green">
+          <div class="svc-name">⚡ Edge Function</div>
+          <div class="svc-desc">Deno 运行时<br>AI 请求中转代理</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer layer-amap">
+      <div class="layer-title">
+        <span class="dot"></span> 地图服务层 — 高德地图 API
+      </div>
+      <div class="service-row">
+        <div class="service-tag orange">
+          <div class="svc-name">🗺️ 瓦片服务</div>
+          <div class="svc-desc">webrd01.is.autonavi.com<br>style=7 清新绿色</div>
+        </div>
+      </div>
+      <div class="service-row" style="margin-top:8px">
+        <div class="service-tag orange">
+          <div class="svc-name">🔍 地点搜索</div>
+          <div class="svc-desc">inputtips API<br>城市/地名/花卉搜索</div>
+        </div>
+        <div class="service-tag orange">
+          <div class="svc-name">📍 逆地理编码</div>
+          <div class="svc-desc">regeo API<br>坐标 → 地址</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-from-supabase">
+    <svg viewBox="0 0 28 22"><defs><marker id="c" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#7C4DFF"/></marker></defs><line x1="14" y1="0" x2="14" y2="16" stroke="#7C4DFF" stroke-width="2" marker-end="url(#c)"/></svg>
+  </div>
+
+  <!-- ===== AI 模型层 ===== -->
+  <div class="layer layer-ai">
+    <div class="layer-title">
+      <span class="dot"></span> AI 模型层 — 在线双引擎 + 离线兜底
+    </div>
+    <div class="ai-cards">
+      <div class="ai-card">
+        <div class="ai-name">🧠 DeepSeek</div>
+        <div class="ai-model">大语言模型</div>
+        <div class="ai-desc">自然语言花卉问答<br>多轮对话 · 上下文记忆<br>经 Edge Function 代理调用</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-name">👁️ Qwen-VL-Plus</div>
+        <div class="ai-model">多模态视觉模型（阿里云 DashScope）</div>
+        <div class="ai-desc">拍照识花 · 图像理解<br>Base64 图片传输<br>经 Edge Function 代理调用</div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-name">📚 本地离线引擎</div>
+        <div class="ai-model">关键词匹配 · 离线优先</div>
+        <div class="ai-desc">50+ 花卉关键词库<br>42 城市市花数据<br>22 赏花地数据<br>AI 不可用时自动降级</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
